@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <listeners>
+        <listener class-name="org.study.testcomponents.Listeners"/>
+    </listeners>
+    
+    <test thread-count="5" name="Add to Cart">
+        <classes>
+            <class name="org.study.tests.AddProductToCartTest"/>
+        </classes>
+    </test>
+
+    <test thread-count="5" name="Login">
+        <classes>
+            <class name="org.study.tests.LoginTest"/>
+        </classes>
+    </test>
+
+    <test thread-count="5" name="Login Error">
+        <classes>
+            <class name="org.study.tests.LoginErrorTest"/>
+        </classes>
+    </test>
+
+    <test thread-count="5" name="Place Order">
+        <classes>
+            <class name="org.study.tests.PlaceOrderTest"/>
+        </classes>
+    </test>
+
+</suite>
