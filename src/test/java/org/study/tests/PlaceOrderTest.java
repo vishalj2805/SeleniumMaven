@@ -14,6 +14,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,8 +28,13 @@ public class PlaceOrderTest extends TestBase {
         landingPage.login(data.get("email"), data.get("password"));
         landingPage.addProductToCart(data.get("product"));
         CartPage cartPage = landingPage.goToCartPage();
-        orderIDOnTYPage = cartPage.verifyProductNameAndBuy(data.get("product"));
+        String[] orderDetails = cartPage.verifyProductNameAndBuy(data.get("product"));
 
+        if (Arrays.stream(orderDetails).toList().get(1).strip().equals(" Thankyou for the order. ".strip())){
+            Assert.assertTrue(true);
+        }
+
+        orderIDOnTYPage = Arrays.stream(orderDetails).toList().get(0);
         if (cartPage.verifyOrderID(orderIDOnTYPage)){
             Assert.assertTrue(true);
         } else {

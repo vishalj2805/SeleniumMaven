@@ -28,5 +28,4 @@
             <class name="org.study.tests.PlaceOrderTest"/>
         </classes>
     </test>
-
 </suite>

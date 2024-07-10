@@ -37,12 +37,13 @@ public class CartPage extends AbstractComponents {
     @FindBy(xpath = "//label[@class='ng-star-inserted']")
     WebElement orderID;
 
-
-
     @FindBy(xpath = "//th[@scope='row']")
     List<WebElement> orderIDs;
 
-    public String verifyProductNameAndBuy(String productName) {
+    @FindBy(xpath = "//h1")
+    WebElement confirmationMSG;
+
+    public String[] verifyProductNameAndBuy(String productName) {
         List<WebElement> cartProducts = this.cartProducts;
         for (int i=0;i<cartProducts.size();i++){
             if(cartProducts.get(i).getText().equals(productName)){
@@ -56,7 +57,8 @@ public class CartPage extends AbstractComponents {
                 .stream().filter(country -> country.getText().equalsIgnoreCase("India")).toList().getFirst().click();
 
         submitBTN.click();
-        return orderID.getText();
+        String thankYouMSG = confirmationMSG.getText();
+        return new String[]{orderID.getText(),thankYouMSG};
     }
 
     public boolean verifyOrderID(String orderID){

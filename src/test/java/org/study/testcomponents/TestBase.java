@@ -2,11 +2,15 @@ package org.study.testcomponents;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
+import org.checkerframework.checker.units.qual.C;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.safari.SafariDriver;
+import org.study.pageobjects.LandingPage;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -28,9 +32,14 @@ public class TestBase {
         prop.load(new FileInputStream(System.getProperty("user.dir") + "//src//main//java//org//study//resources//GlobalData.properties"));
 
         String browserName = System.getProperty("browser")!=null ? System.getProperty("browser") : prop.getProperty("browser");
-        if(browserName.equalsIgnoreCase("chrome")){
+        if(browserName.contains("chrome")){
+            ChromeOptions chromeOptions = new ChromeOptions();
+            if(browserName.contains("headless")){
+                chromeOptions.addArguments("headless");
+            }
             WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
+            driver = new ChromeDriver(chromeOptions);
+            driver.manage().window().setSize(new Dimension(1920,1080));
         } else if (browserName.equalsIgnoreCase("safari")) {
             WebDriverManager.safaridriver().setup();
             driver = new SafariDriver();
@@ -46,9 +55,14 @@ public class TestBase {
         driver.quit();
     }
 
+    public LandingPage goToLandingPage() throws IOException {
+        initializeBrowser();
+        return new LandingPage(driver);
+    }
+
     public String takeScreenshot(String name, WebDriver driver) throws IOException {
         TakesScreenshot screenshot = (TakesScreenshot)driver;
-        String path = System.getProperty("user.dir") + "//src/test/java/org/study/screenshots//" + name + ".png";
+        String path = System.getProperty("user.dir") + "//src/test/java/org/study/screenshots//" + name + ".jpg";
         FileUtils.copyFile(screenshot.getScreenshotAs(OutputType.FILE),
                 new File(path));
         return path;
