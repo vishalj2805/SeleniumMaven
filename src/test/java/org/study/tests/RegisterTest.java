@@ -10,31 +10,24 @@ import java.util.List;
 import java.util.Map;
 
 public class RegisterTest {
-
+    ExcelReader excelReader = new ExcelReader();
 
     @Test(dataProvider = "getData")
-    public void registerUser(HashMap<String, String> data){
-        System.out.println(data.get("First Name"));
-        System.out.println(data.get("Last Name"));
-        System.out.println(data.get("Email"));
-        System.out.println(data.get("Phone Number"));
-        System.out.println(data.get("Gender"));
-        System.out.println(data.get("Occupation"));
-        System.out.println(data.get("Password"));
-        System.out.println(data.get("Confirm Password"));
+    public void registerUser(String fName, String lName, String email, String phoneNumber, String gender,
+                             String occupation, String password, String confirmPassword){
+        System.out.println(fName);
+        System.out.println(lName);
+        System.out.println(email);
+        System.out.println(phoneNumber);
+        System.out.println(gender);
+        System.out.println(occupation);
+        System.out.println(password);
+        System.out.println(confirmPassword);
     }
 
     @DataProvider
-    public Object[] getData() throws IOException {
-        ExcelReader excelReader = new ExcelReader();
-        List<HashMap<String, String>> data =excelReader.getRegisterData();
-        System.out.println(data.size());
-        HashMap[] registerData = new HashMap[data.size()];
+    public Object[][] getData() throws IOException {
 
-        for (int i=0;i<data.size();i++){
-            registerData[i] = data.get(i);
-        }
-
-        return registerData;
+        return excelReader.getDataFromSheet("Register");
     }
 }

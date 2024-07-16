@@ -1,9 +1,8 @@
 package org.study.data;
 
 import io.cucumber.java.an.E;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
+import io.cucumber.java.sl.Ce;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -16,90 +15,19 @@ import java.util.*;
 public class ExcelReader {
     DataFormatter dataFormatter = new DataFormatter();
 
-
-    public static void main(String[] args) throws IOException {
-        ExcelReader excelReader = new ExcelReader();
-        List<HashMap<String, String>> data = excelReader.getRegisterData();
-        System.out.println(data.size());
-        System.out.println(data.getFirst().size());
-//        HashMap<String, String> registerData =
-//
-//
-//        for (int i=0;i<data.size();i++){
-//            for (int j=0;j<=data.getFirst().size()-1;j++){
-//                registerData[i][j] = data.get(i).entrySet().stream().toList().get(j).getValue();
-//            }
-//        }
-//
-//        System.out.println(Arrays.deepToString(registerData));
-
-    }
-
-
-    public HashMap<String, String> getCredentialsData() throws IOException {
-//        ExcelReader excelReader = new ExcelReader();
+    public String[][] getDataFromSheet(String sheetName) throws IOException {
         FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "/src/test/java/org/study/data/TestData.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
-        XSSFSheet sheet = null;
-        int noOfSheets = workbook.getNumberOfSheets();
+        XSSFSheet sheet = workbook.getSheet(sheetName);
 
-        for (int i = 0; i < noOfSheets; i++) {
-            if (workbook.getSheetName(i).equals("Credentials")) {
-                sheet = workbook.getSheetAt(i);
+        String[][] data = new String[sheet.getPhysicalNumberOfRows()-1][sheet.getRow(0).getPhysicalNumberOfCells()];
+        for (int i=1;i<sheet.getPhysicalNumberOfRows();i++){
+            XSSFRow row = sheet.getRow(i);
+            for (int j=0;j<row.getPhysicalNumberOfCells();j++){
+                data[i-1][j] = dataFormatter.formatCellValue(row.getCell(j));
             }
         }
-
-        HashMap<String, String> credentials = new HashMap<>();
-//        System.out.println(getIndexOfColumn(sheet, "Username"));
-//        System.out.println(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Password")));
-
-        for (int i = 0; i < sheet.getLastRowNum(); i++) {
-            credentials.put(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Username")).get(i),
-                    getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Password")).get(i));
-
-        }
-
-        System.out.println(credentials);
-
-        return credentials;
-
-    }
-
-    public List<HashMap<String, String>> getRegisterData() throws IOException {
-//        ExcelReader excelReader = new ExcelReader();
-        FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "/src/test/java/org/study/data/TestData.xlsx");
-        XSSFWorkbook workbook = new XSSFWorkbook(fis);
-        XSSFSheet sheet = null;
-        int noOfSheets = workbook.getNumberOfSheets();
-
-        for (int i = 0; i < noOfSheets; i++) {
-            if (workbook.getSheetName(i).equals("Register")) {
-                sheet = workbook.getSheetAt(i);
-            }
-        }
-
-        List<HashMap<String, String>> credentials = new ArrayList<>();
-
-//        System.out.println(getIndexOfColumn(sheet, "Username"));
-//        System.out.println(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Password")));
-
-        for (int i = 0; i < sheet.getLastRowNum(); i++) {
-            HashMap<String, String> data = new HashMap<>();
-            data.put("First Name", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "First Name")).get(i)));
-            data.put("Last Name", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Last Name")).get(i)));
-            data.put("Email", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Email")).get(i)));
-            data.put("Phone Number", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Phone Number")).get(i)));
-            data.put("Occupation", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Occupation")).get(i)));
-            data.put("Gender", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Gender")).get(i)));
-            data.put("Password", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Password")).get(i)));
-            data.put("Confirm Password", String.valueOf(getCellValueOfColumn(sheet, getIndexOfColumn(sheet, "Confirm Password")).get(i)));
-            credentials.add(data);
-        }
-
-//        System.out.println(credentials);
-
-        return credentials;
-
+        return data;
     }
 
     public int getIndexOfColumn(XSSFSheet sheet, String columnName) {

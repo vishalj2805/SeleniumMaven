@@ -18,7 +18,7 @@ public class LoginTest extends TestBase {
     ExcelReader excelReader = new ExcelReader();
 
     @Test(dataProvider = "getData")
-    public void login(String username, String password) throws IOException, InterruptedException {
+    public void login(String username, String password, String phoneNumber) throws IOException, InterruptedException {
 
         LandingPage landingPage = new LandingPage(driver);
         landingPage.login(username, password);
@@ -26,16 +26,7 @@ public class LoginTest extends TestBase {
     }
 
     @DataProvider
-    public Object[] getData() throws IOException {
-        HashMap<String, String> data = excelReader.getCredentialsData();
-        String[][] credentials = new String[data.size()][data.size()-1];
-
-        for (int i=0;i<data.size();i++){
-            credentials[i][0] = data.entrySet().stream().toList().get(i).getKey();
-            credentials[i][1] = data.entrySet().stream().toList().get(i).getValue();
-        }
-
-        System.out.println(Arrays.deepToString(credentials));
-        return credentials;
+    public Object[][] getData() throws IOException {
+        return excelReader.getDataFromSheet("Credentials");
     }
 }

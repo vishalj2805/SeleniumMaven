@@ -55,7 +55,7 @@ public class TestBase {
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
-        driver.get(prop.getProperty("url1"));
+        driver.get(prop.getProperty("url"));
     }
 
     @AfterMethod(alwaysRun = true)
