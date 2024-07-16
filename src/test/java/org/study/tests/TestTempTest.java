@@ -4,12 +4,14 @@ import io.cucumber.java.hu.Ha;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -20,21 +22,17 @@ public class TestTempTest {
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
         XSSFSheet sheet = workbook.getSheet("Register");
         DataFormatter dataFormatter = new DataFormatter();
+        String phoneNumberField = "Mobile Number";
 
 
-        Iterator<Row> rowIterator = sheet.rowIterator();
+        XSSFRow row = sheet.getRow(0);
+        XSSFCell cell = row.getCell(3);
+        System.out.println("Before Update: " + cell.getStringCellValue());
 
-        while (rowIterator.hasNext()){
-            Row row = rowIterator.next();
-            Iterator<Cell> cellIterator = row.cellIterator();
-            while (cellIterator.hasNext()){
-                Cell cell = cellIterator.next();
-                System.out.println(dataFormatter.formatCellValue(cell));
-                System.out.println(cell.getCellType());
-            }
-
-        }
-
-
+        cell.setCellValue(phoneNumberField);
+        FileOutputStream fos = new FileOutputStream("/Users/vishalj/IdeaProjects/SeleniumMaven/src/test/java/org/study/data/TestData.xlsx");
+        workbook.write(fos);
+        System.out.println("After Update: " + cell.getStringCellValue());
+        workbook.close();
     }
 }

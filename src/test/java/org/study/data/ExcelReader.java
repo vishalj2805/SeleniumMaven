@@ -1,5 +1,6 @@
 package org.study.data;
 
+import io.cucumber.java.an.E;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -9,10 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class ExcelReader {
@@ -144,6 +142,7 @@ public class ExcelReader {
 
 
     public <T> void updateEntryDetails(String path, HashMap<T, HashMap<T, T>> data) throws IOException {
+        ExcelReader excelReader = new ExcelReader();
         FileInputStream fis = new FileInputStream(path);
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
         XSSFSheet sheet = workbook.getSheetAt(0);
@@ -176,7 +175,7 @@ public class ExcelReader {
             XSSFCell cell = row.getCell(i);
             for (int j = 0; j < data.size(); j++) {
                 for (int k=0;k<data.entrySet().stream().toList().get(j).getValue().size();k++){
-                    if (data.entrySet().stream().toList().get(j).getValue().entrySet().stream().toList().get(k).getKey().equals(cell.getStringCellValue())) {
+                    if (data.entrySet().stream().toList().get(j).getValue().entrySet().stream().toList().get(k).getKey().equals(cell.getRawValue())) {
                         System.out.println(cell.getStringCellValue());
 //                        columnNos.put(cell.getStringCellValue(), i);
                         row = sheet.getRow(rowNo);
@@ -184,11 +183,16 @@ public class ExcelReader {
                         System.out.println(cell.getNumericCellValue());
                         System.out.println(data.entrySet().stream().toList().get(j).getKey());
                         System.out.println(data.entrySet().stream().toList().get(j).getValue().entrySet().stream().toList().get(k).getValue().toString());
-                        cell.setCellValue(data.entrySet().stream().toList().get(j).getValue().entrySet().stream().toList().get(k).getValue().toString());
+                        cell.setCellValue(Integer.parseInt(data.entrySet().stream().toList().get(j).getValue().entrySet().stream().toList().get(k).getValue().toString()));
                     }
                 }
             }
         }
+        FileOutputStream fos = new FileOutputStream(path);
+        workbook.write(fos);
+        workbook.close();
+        fis.close();
+        fos.close();
 //        System.out.println(columnNos.entrySet());
 
 

@@ -49,7 +49,12 @@ public class DownloadUploadPage extends AbstractComponents {
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
 
+        while (listOfFiles==null){
+            listOfFiles = folder.listFiles();
+        }
+
         for(File file: listOfFiles){
+            System.out.println(file.getName());
             if (file.getName().equals(fileName)){
                 return true;
             }

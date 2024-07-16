@@ -48,12 +48,10 @@ public class DownloadEditUploadVerifyTest extends TestBase {
        }});
 
 
-
-
-
-
-       Thread.sleep(3000);
-
+       downloadUploadPage.uploadFile("/Users/vishalj/Downloads/download.xlsx");
+       String successMSG = downloadUploadPage.getSuccessToastMSG();
+       System.out.println(successMSG);
+       downloadUploadPage.checkPricesOfFruits(new ArrayList<String>(updatePrices.keySet().stream().toList()));
     }
 
 }
