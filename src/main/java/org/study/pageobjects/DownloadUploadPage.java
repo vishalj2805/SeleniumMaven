@@ -45,8 +45,8 @@ public class DownloadUploadPage extends AbstractComponents {
         downloadBTN.click();
     }
 
-    public boolean verifyFileIsDownloadedOnComputer(String fileName){
-        File folder = new File("/Users/vishalj/Downloads");
+    public boolean verifyFileIsDownloadedOnComputer(String fileName, String path){
+        File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
 
         for(File file: listOfFiles){

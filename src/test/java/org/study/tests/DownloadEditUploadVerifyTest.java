@@ -18,20 +18,26 @@ public class DownloadEditUploadVerifyTest extends TestBase {
    @Test
     public void downloadEditUploadVerify() throws InterruptedException, IOException {
        DownloadUploadPage downloadUploadPage = new DownloadUploadPage(driver);
-//       downloadUploadPage.clickOnDownloadBTN();
-//       Assert.assertTrue(downloadUploadPage.verifyFileIsDownloadedOnComputer("download.xlsx"));
+       String path;
+       if(System.getProperty("os.name").equals("Windows 11")){
+           path = "C:\\Users\\Visha\\Downloads";
+       }else{
+           path = "/Users/vishalj/Downloads";
+       }
+       downloadUploadPage.clickOnDownloadBTN();
+       Assert.assertTrue(downloadUploadPage.verifyFileIsDownloadedOnComputer("download.xlsx", path));
 //       downloadUploadPage.uploadFile("/Users/vishalj/Downloads/download.xlsx");
 //       String successMSG = downloadUploadPage.getSuccessToastMSG();
 //       System.out.println(successMSG);
 
-//       HashMap<String, Integer> updatePrices = new HashMap<>(){{
-//           put("Apple", 400);
-//           put("Orange", 300);
-//       }};
-//
-//       downloadUploadPage.checkPricesOfFruits(new ArrayList<String>(updatePrices.keySet().stream().toList()));
+       HashMap<String, Integer> updatePrices = new HashMap<>(){{
+           put("Apple", 400);
+           put("Orange", 300);
+       }};
 
-       excelReader.updateEntryDetails("/Users/vishalj/Downloads/download.xlsx", new HashMap<String, HashMap<String, String>>(){{
+       downloadUploadPage.checkPricesOfFruits(new ArrayList<String>(updatePrices.keySet().stream().toList()));
+
+       excelReader.updateEntryDetails(path + "/download.xlsx", new HashMap<String, HashMap<String, String>>(){{
            put("Orange", new HashMap<>(){{
                put("price", "400");
            }});
