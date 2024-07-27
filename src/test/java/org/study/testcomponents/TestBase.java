@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class TestBase {
@@ -38,6 +39,10 @@ public class TestBase {
         String browserName = System.getProperty("browser")!=null ? System.getProperty("browser") : prop.getProperty("browser");
         if(browserName.contains("chrome")){
             ChromeOptions chromeOptions = new ChromeOptions();
+            HashMap<String, Object> downloadPathDirChange = new HashMap<>();
+            downloadPathDirChange.put("profile.default_content_settings.popups", 0);
+            downloadPathDirChange.put("download.default_directory", System.getProperty("user.dir"));
+            chromeOptions.setExperimentalOption("prefs", downloadPathDirChange);
             if(browserName.contains("headless")){
                 chromeOptions.addArguments("headless");
             }
