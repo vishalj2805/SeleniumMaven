@@ -17,6 +17,7 @@ public class DownloadEditUploadVerifyTest extends TestBase {
 
    @Test
     public void downloadEditUploadVerify() throws InterruptedException, IOException {
+       driver.navigate().to("https://rahulshettyacademy.com/upload-download-test/index.html");
        DownloadUploadPage downloadUploadPage = new DownloadUploadPage(driver);
        String path;
        if(System.getProperty("os.name").equals("Windows 11")){
